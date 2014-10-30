@@ -1,0 +1,12 @@
+#cloud-config
+
+coreos:
+  fleet:
+    public-ip: $public_ipv4
+    etcd_servers: http://172.17.8.20:4001
+    metadata: role=agent
+  units:
+    - name: etcd.service
+      mask: true
+    - name: fleet.service
+      command: start

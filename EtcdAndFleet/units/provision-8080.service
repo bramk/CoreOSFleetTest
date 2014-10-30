@@ -1,0 +1,14 @@
+[Unit]
+Description=INAETICS Provision Service on host port 8080
+Documentation=https://github.com/INAETICS
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull 172.17.8.120:5000/inaetics/node-provisioning:latest
+ExecStart=/usr/bin/docker run -p 8080:8080 -e ETCDCTL_PEERS=http://172.17.8.20:4001 172.17.8.120:5000/inaetics/node-provisioning:latest /tmp/node-provisioning.sh agent-${COREOS_PUBLIC_IPV4} ${COREOS_PUBLIC_IPV4}
+Restart=always
+RestartSec=10
+
+[X-Fleet]
+MachineMetadata=role=agent
+

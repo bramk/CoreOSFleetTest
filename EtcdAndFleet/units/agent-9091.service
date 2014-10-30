@@ -1,0 +1,15 @@
+[Unit]
+Description=INAETICS Agent Service on host port 9091
+Documentation=https://github.com/INAETICS
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull 172.17.8.120:5000/inaetics/node-agent:latest
+ExecStart=/usr/bin/docker run -p 9091:8080 -e ETCDCTL_PEERS=http://172.17.8.20:4001 172.17.8.120:5000/inaetics/node-agent:latest /tmp/node-agent.sh agent-9091-${COREOS_PUBLIC_IPV4} ${COREOS_PUBLIC_IPV4}
+Restart=always
+RestartSec=10
+
+[X-Fleet]
+Global=true
+MachineMetadata=role=agent
+
